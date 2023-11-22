@@ -89,7 +89,7 @@ export const addUser = async (request: FastifyRequest, reply: FastifyReply) => {
   return db.sql<
     s.users.SQL,
     s.users.Insertable[]
-  >`INSERT INTO ${"users"} (${"email"}, password) VALUES ('example@example.com', 'motdepasse123')`
+  >`INSERT INTO ${"users"} (email, password) VALUES ('example@example.com', 'motdepasse123')`
     .run(pool)
     .then((users) => ({ data: users }));
   // Or .then((users) => reply.send({ data: users }))
