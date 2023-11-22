@@ -8,7 +8,4 @@ export const initDB = async () => {
             password TEXT NOT NULL
         );
     `;
-  db.sql`
-          INSERT INTO users (email, password) VALUES ('example@example.com', 'motdepasse123');
-      `;
 };

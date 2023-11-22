@@ -1,6 +1,6 @@
 {
   "db": {
-    "connectionString": "postgres://pltxbugw:bijH_abvRU1B3xMuoWFlSPM8LNNKXKHu@berry.db.elephantsql.com/pltxbugw"
+    "connectionString": "postgres://DB_USER:DB_PASSWORD@DB_HOST/DB_NAME"
   },
   "outDir": "./src",
   "schemas": {
