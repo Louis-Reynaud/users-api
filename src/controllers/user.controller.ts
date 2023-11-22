@@ -1,6 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { IUser } from "../interfaces";
 
+import type * as s from "zapatos/schema";
+import * as db from "zapatos/db";
+import pool from "../db/pgPool";
+
 const staticUsers: IUser[] = [
   {
     id: 1,
@@ -24,15 +28,15 @@ const staticUsers: IUser[] = [
   },
 ];
 
-export const listUsers = async (
-  request: FastifyRequest,
-  reply: FastifyReply
-) => {
-  console.log("listUsers");
-  Promise.resolve(staticUsers).then((users) => {
-    reply.send({ data: users });
-  });
-};
+// export const listUsers = async (
+//   request: FastifyRequest,
+//   reply: FastifyReply
+// ) => {
+//   console.log("listUsers");
+//   Promise.resolve(staticUsers).then((users) => {
+//     reply.send({ data: users });
+//   });
+// };
 
 export const getUserById = async (
   request: FastifyRequest,
@@ -69,4 +73,14 @@ export const addUser = async (request: FastifyRequest, reply: FastifyReply) => {
       reply.send({ error: "404, not found" });
     }
   });
+};
+
+export const listUsers = async (
+  request: FastifyRequest,
+  reply: FastifyReply
+) => {
+  return db.sql<s.users.SQL, s.users.Selectable[]>`SELECT * FROM ${"users"}`
+    .run(pool)
+    .then((users) => ({ data: users }));
+  // Or .then((users) => reply.send({ data: users }))
 };

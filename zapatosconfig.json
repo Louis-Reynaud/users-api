@@ -1,0 +1,12 @@
+{
+  "db": {
+    "connectionString": "postgres://pltxbugw:bijH_abvRU1B3xMuoWFlSPM8LNNKXKHu@berry.db.elephantsql.com/pltxbugw"
+  },
+  "outDir": "./src",
+  "schemas": {
+    "public": {
+      "include": ["users"],
+      "exclude": []
+    }
+  }
+}
