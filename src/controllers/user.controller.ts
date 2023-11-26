@@ -59,14 +59,27 @@ export const listUsers = async (
 };
 
 export const addUser = async (request: FastifyRequest, reply: FastifyReply) => {
-  const params: any = request.params;
-  const userName = params["name"];
-  let namea: db.SQL = db.sql`${userName}`;
-
+  let name = (request.params as any)["name"] as db.SQL;
   return db.sql<
     s.users.SQL,
     s.users.Insertable[]
-  >`INSERT INTO ${"users"} (name) VALUES ('${namea}')`
+  >`INSERT INTO ${"users"} (name, score) VALUES ('${name}', '34')`
+    .run(pool)
+    .then((users) => ({ data: users }));
+  // Or .then((users) => reply.send({ data: users }))
+};
+
+export const updateUser = async (
+  request: FastifyRequest,
+  reply: FastifyReply
+) => {
+  let user_id = (request.params as any)["id"] as db.SQL;
+  let new_name = (request.body as any)["name"] as db.SQL;
+  let new_score = (request.body as any)["score"] as db.SQL;
+  return db.sql<
+    s.users.SQL,
+    s.users.Updatable[]
+  >`UPDATE ${"users"} SET name = '${new_name}', score = 12 WHERE user_id = 1`
     .run(pool)
     .then((users) => ({ data: users }));
   // Or .then((users) => reply.send({ data: users }))
