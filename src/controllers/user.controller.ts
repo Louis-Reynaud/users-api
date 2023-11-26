@@ -86,11 +86,14 @@ export const listUsers = async (
 };
 
 export const addUser = async (request: FastifyRequest, reply: FastifyReply) => {
-  let namea = "Maxooo" as db.SQL;
+  const params: any = request.params;
+  const userName = params["name"];
+  let namea :  db.SQL = db.sql`${userName}` ;
+
   return db.sql<
     s.users.SQL,
     s.users.Insertable[]
-  >`INSERT INTO ${"users"} (${"email"}, password) VALUES ('example@example.com', 'motdepasse123')`
+  >`INSERT INTO ${"users"} (name) VALUES ('${namea}')`
     .run(pool)
     .then((users) => ({ data: users }));
   // Or .then((users) => reply.send({ data: users }))

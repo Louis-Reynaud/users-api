@@ -4,7 +4,7 @@ import "dotenv/config";
 import { initDB } from "./db/initDB";
 
 const port = 5000;
-
+const host = '0.0.0.0'
 const startServer = async () => {
   try {
     await initDB();
@@ -21,8 +21,7 @@ const startServer = async () => {
 
     server.register(userRouter, { prefix: "/api/user" });
 
-    await server.listen({ port }, errorHandler);
-  } catch (e) {
+await server.listen({ host, port }, errorHandler)  } catch (e) {
     console.error(e);
   }
 };
