@@ -13,10 +13,17 @@ async function userRouter(fastify: FastifyInstance) {
     url: "/:id",
     handler: controllers.getUserById,
   });
+
   fastify.route({
     method: "POST",
     url: "/:name",
     handler: controllers.addUser,
+  });
+
+  fastify.route({
+    method: "PUT",
+    url: "/:id",
+    handler: controllers.updateUser,
   });
 }
 

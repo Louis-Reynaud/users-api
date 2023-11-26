@@ -6,6 +6,6 @@ export const initDB = async () => {
     user_id SERIAL PRIMARY KEY,
     name	TEXT NOT NULL,
     score   INTEGER DEFAULT 0
-  )  
+  )   
     `;
 };

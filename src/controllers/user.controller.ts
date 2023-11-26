@@ -28,16 +28,6 @@ const staticUsers: IUser[] = [
   },
 ];
 
-// export const listUsers = async (
-//   request: FastifyRequest,
-//   reply: FastifyReply
-// ) => {
-//   console.log("listUsers");
-//   Promise.resolve(staticUsers).then((users) => {
-//     reply.send({ data: users });
-//   });
-// };
-
 export const getUserById = async (
   request: FastifyRequest,
   reply: FastifyReply
@@ -45,35 +35,18 @@ export const getUserById = async (
   const params: any = request.params;
   const userId = params["id"];
   console.log(userId);
-  Promise.resolve(staticUsers).then((users) => {
-    const filteredUsers = users.filter((user: any) => {
-      return user["id"] == userId;
+  return db.sql<
+    s.users.SQL,
+    s.users.Selectable[]
+  >`SELECT * FROM ${"users"} WHERE user_id = ${userId}`
+    .run(pool)
+    .then((user) => {
+      console.log("coucou : ", user);
+      if (user["data"]) {
+        return { data: user };
+      } else return { error: "404: user not found" };
     });
-    console.log("coucou", filteredUsers);
-    if (filteredUsers) {
-      reply.send({ data: filteredUsers[0] });
-    } else {
-      reply.send({ error: "404, not found" });
-    }
-  });
 };
-
-// export const addUser = async (request: FastifyRequest, reply: FastifyReply) => {
-//   const params: any = request.params;
-//   const userName = params["name"];
-//   return Promise.resolve(staticUsers).then((users) => {
-//     const list: number[] = users.map((user) => user.id);
-//     const user = {
-//       id: Math.max(...list) + 1,
-//       name: userName,
-//     };
-//     if (params) {
-//       staticUsers.push(user);
-//     } else {
-//       reply.send({ error: "404, not found" });
-//     }
-//   });
-// };
 
 export const listUsers = async (
   request: FastifyRequest,
@@ -86,11 +59,29 @@ export const listUsers = async (
 };
 
 export const addUser = async (request: FastifyRequest, reply: FastifyReply) => {
-  let namea = "Maxooo" as db.SQL;
+  let name = (request.params as any)["name"] as db.SQL;
   return db.sql<
     s.users.SQL,
     s.users.Insertable[]
-  >`INSERT INTO ${"users"} (${"email"}, password) VALUES ('example@example.com', 'motdepasse123')`
+  >`INSERT INTO ${"users"} (name, score) VALUES ('${name}', '34')`
+    .run(pool)
+    .then((users) => ({ data: users }));
+  // Or .then((users) => reply.send({ data: users }))
+};
+
+export const updateUser = async (
+  request: FastifyRequest,
+  reply: FastifyReply
+) => {
+  let user_id = (request.params as any)["id"] as db.SQL;
+  let new_name = (request.body as any)["name"] as db.SQL;
+  console.log("coucou", new_name);
+  let new_score = (request.body as any)["score"] as db.SQL;
+  console.log("coucou 2", new_score as Number);
+  return db.sql<
+    s.users.SQL,
+    s.users.Updatable[]
+  >`UPDATE ${"users"} SET name = '${new_name}', score = 12 WHERE user_id = 1`
     .run(pool)
     .then((users) => ({ data: users }));
   // Or .then((users) => reply.send({ data: users }))
